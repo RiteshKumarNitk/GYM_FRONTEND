@@ -22,7 +22,13 @@ const AppRoutes = () => {
         {/* Public Route */}
         <Route path="/signin" element={<SignIn />} />
         <Route path="/unauthorized" element={<Unauthorized />} />
-
+     
+        {/* Super Admin Routes */}
+            <Route path="/create-tenant" element={
+              <ProtectedRoute allowedRoles={['superadmin']}>
+                {/* <CreateTenant /> */}
+              </ProtectedRoute>
+            } />
         {/* Super Admin Routes */}
         <Route path="/create-tenant" element={
           <ProtectedRoute allowedRoles={['superadmin']}>

@@ -1,13 +1,14 @@
 import { createContext, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    // Check existing session on app load
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
       setUser(JSON.parse(storedUser));
@@ -32,11 +33,13 @@ export const AuthProvider = ({ children }) => {
         role: data.role,
         tenantId: data.tenantId,
         userId: data.userId,
-        name: data.name
+        name: data.name,
+        email: data.email
       };
 
       setUser(userData);
       localStorage.setItem("user", JSON.stringify(userData));
+      navigate("/"); // Redirect to dashboard after login
       return data;
     } catch (error) {
       console.error("Login failed:", error);
@@ -47,6 +50,7 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     setUser(null);
     localStorage.removeItem("user");
+    navigate("/signin"); // Redirect to signin after logout
   };
 
   const value = {
